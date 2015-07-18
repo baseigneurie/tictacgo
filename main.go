@@ -6,11 +6,11 @@ import (
 	"time"
 )
 
-const cellCnt, xCheck, oCheck, xWin, oWin = 9, 2, 10, 3, 15
+const xCheck, oCheck, xWin, oWin = 2, 10, 3, 15
 
 // This will be the main object that will be passed between the browser and server.
 // 0 - "", 1 - X, 5 - O
-var played = []int{1, 0, 0, 0, 5, 0, 5, 0, 0}
+var played = []int{0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 var turn, mode, comp, player = "", "", "", ""
 
@@ -35,21 +35,19 @@ func main() {
 	mode = "play"
 	xMoves, oMoves := moves{}, moves{}
 	if player == turn && mode == "play" {
-		if !playRound() {
-			// Player wins, game over
-		} else {
-			endRound()
-		}
+		// Check to see if new move is a winner
+		playRound()
+		// Ends current round, returns response to view
+		endRound()
 	} else if comp == turn && mode == "play" {
-		//Computer first checks availale moves
+		//Computer first checks available moves
 		findMoves(&xMoves, xCheck)
 		findMoves(&oMoves, oCheck)
 		playMove(&xMoves, &oMoves)
-		if !playRound() {
-			// Computer wins, game over
-		} else {
-			endRound()
-		}
+		// Check to see if new move is a winner
+		playRound()
+		// Ends current round, returns response to view
+		endRound()
 	}
 	fmt.Println(xMoves, oMoves)
 }
@@ -59,23 +57,16 @@ func assignPlayer() {
 	comp = "o"
 }
 
-func playRound() bool {
+func playRound() {
 	if turn == "x" {
-		r, w := findWin(xWin)
-		if r {
-			fmt.Println(w)
+		if findWin(xWin) {
 			mode = "win"
-			return false
 		}
 	} else if turn == "o" {
-		r, w := findWin(oWin)
-		if r {
-			fmt.Println(w)
+		if findWin(oWin) {
 			mode = "win"
-			return false
 		}
 	}
-	return true
 }
 
 func playMove(x *moves, o *moves) {
@@ -143,18 +134,17 @@ func checkDup(m *moves, n int) bool {
 	return true
 }
 
-func findWin(n int) (bool, []int) {
+func findWin(n int) bool {
 	for _, v := range combo {
 		sum := played[v[0]] + played[v[1]] + played[v[2]]
 		if sum == n {
-			win := []int{v[0], v[1], v[2]}
-			return true, win
+			return true
 		}
 	}
-	return false, []int{0, 0, 0}
+	return false
 }
 
 func endRound() {
 	// This will end the round and return to the view
-
+	fmt.Println(played, mode, turn)
 }
