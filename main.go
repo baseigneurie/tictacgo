@@ -10,7 +10,7 @@ const xCheck, oCheck, xWin, oWin = 2, 10, 3, 15
 
 // This will be the main object that will be passed between the browser and server.
 // 0 - "", 1 - X, 5 - O
-var played = []int{0, 0, 0, 0, 0, 0, 0, 0, 0}
+var played = []int{1, 0, 0, 0, 5, 0, 5, 0, 0}
 
 var turn, mode, comp, player = "", "", "", ""
 
@@ -83,7 +83,9 @@ func playMove(x *moves, o *moves) {
 			i := num.Intn(len(o.cnt))
 			played[o.cnt[i]] = mark
 		} else {
-			//Makes no play
+			// Finds empty spot
+			n := findEmpty()
+			played[n] = mark
 			return
 		}
 	} else if comp == "o" {
@@ -97,7 +99,9 @@ func playMove(x *moves, o *moves) {
 			i := num.Intn(len(x.cnt))
 			played[x.cnt[i]] = mark
 		} else {
-			//Makes no play
+			//Finds empty spot
+			n := findEmpty()
+			played[n] = mark
 			return
 		}
 	}
@@ -123,6 +127,18 @@ func findOpen(i [3]int) int {
 		}
 	}
 	return 0
+}
+
+func findEmpty() int {
+	var cnt []int
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i, v := range played {
+		if v == 0 {
+			cnt = append(cnt, i)
+		}
+	}
+	i := r.Intn(len(cnt))
+	return cnt[i]
 }
 
 func checkDup(m *moves, n int) bool {
