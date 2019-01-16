@@ -2,29 +2,38 @@ package ttg
 
 import "fmt"
 
-var moves [3][3]string
+type Moves struct {
+	A1 string
+	A2 string
+	A3 string
+
+	B1 string
+	B2 string
+	B3 string
+
+	C1 string
+	C2 string
+	C3 string
+}
 
 var board [17]string
 
-type Quadrant struct {
-	Row [5]string
-	Col [5]string
-}
-
 func DrawBoard() {
-	b := &board
-	n := &NoMarker
-	str := ""
-	for i, r := range b {
-		if i == 6 {
-			str += "#"
-		}
+	// b := &board
+	// n := &NoMarker
+	mv := Moves{}
 
-		if i == 12 {
-			str += "#"
-		}
+	// str := ""
+	// for i, r := range b {
+	// 	if i == 6 {
+	// 		str += "#"
+	// 	}
 
-	}
+	// 	if i == 12 {
+	// 		str += "#"
+	// 	}
+
+	// }
 
 	fmt.Println(str)
 
