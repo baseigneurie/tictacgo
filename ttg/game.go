@@ -1,36 +1,107 @@
 package ttg
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
 var Plays [3][3]string
 var Moves = 0
-var CurrentPlayer string
+var CurrentPlayer = "x"
 
-var GameError string
 var Winner = false
 
-func RegPlay(s string) {
-	switch s {
-	case "a1":
-		Plays[0][0] = CurrentPlayer
-	case "a2":
-		Plays[0][1] = CurrentPlayer
-	case "a3":
-		Plays[0][2] = CurrentPlayer
-	case "b1":
-		Plays[1][0] = CurrentPlayer
-	case "b2":
-		Plays[1][1] = CurrentPlayer
-	case "b3":
-		Plays[1][2] = CurrentPlayer
-	case "c1":
-		Plays[2][0] = CurrentPlayer
-	case "c2":
-		Plays[2][1] = CurrentPlayer
-	case "c3":
-		Plays[2][2] = CurrentPlayer
+func DrawPrompt() error {
+	b := false
+
+	for b == false {
+		r, err := makePlay()
+		if err != nil {
+			return err
+		}
+		b = r
 	}
 
-	SwitchPlayer()
-	Moves++
+	return nil
+}
+
+func makePlay() (bool, error) {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("\nEnter your move (Ex. 'a1', 'b3'): ")
+	text, err := reader.ReadString('\n')
+	if err != nil {
+		return false, err
+	}
+
+	text = strings.TrimSpace(text)
+	text = strings.ToLower(text)
+	b := regPlay(text)
+	return b, nil
+}
+
+func regPlay(s string) bool {
+	switch s {
+	case "a1":
+		if b := spaceCheck(Plays[0][0]); b == false {
+			return b
+		}
+		Plays[0][0] = CurrentPlayer
+	case "a2":
+		if b := spaceCheck(Plays[1][0]); b == false {
+			return b
+		}
+		Plays[1][0] = CurrentPlayer
+	case "a3":
+		if b := spaceCheck(Plays[2][0]); b == false {
+			return b
+		}
+		Plays[2][0] = CurrentPlayer
+	case "b1":
+		if b := spaceCheck(Plays[0][1]); b == false {
+			return b
+		}
+		Plays[0][1] = CurrentPlayer
+	case "b2":
+		if b := spaceCheck(Plays[1][1]); b == false {
+			return b
+		}
+		Plays[1][1] = CurrentPlayer
+	case "b3":
+		if b := spaceCheck(Plays[2][1]); b == false {
+			return b
+		}
+		Plays[2][1] = CurrentPlayer
+	case "c1":
+		if b := spaceCheck(Plays[0][2]); b == false {
+			return b
+		}
+		Plays[0][2] = CurrentPlayer
+	case "c2":
+		if b := spaceCheck(Plays[1][2]); b == false {
+			return b
+		}
+		Plays[1][2] = CurrentPlayer
+	case "c3":
+		if b := spaceCheck(Plays[2][2]); b == false {
+			return b
+		}
+		Plays[2][2] = CurrentPlayer
+	default:
+		ShowError("Please select a move inbounds")
+		return false
+	}
+
+	return true
+}
+
+func spaceCheck(s string) bool {
+	if s != "" {
+		ShowError("That space is occupied. Please select another.")
+		return false
+	}
+	return true
 }
 
 func SwitchPlayer() {
@@ -39,4 +110,9 @@ func SwitchPlayer() {
 	} else {
 		CurrentPlayer = "x"
 	}
+}
+
+func ShowError(msg string) {
+	s := "\nERR: " + msg + "\n"
+	fmt.Printf(ColError(s))
 }

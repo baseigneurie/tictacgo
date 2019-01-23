@@ -7,9 +7,41 @@ import (
 )
 
 func main() {
-	dash := ttg.DrawDash()
-	board := ttg.DrawBoard()
-	p := ttg.DrawPrompt()
+	err := gameStart()
+	if err != nil {
+		fatalError(err)
+	}
+}
 
-	fmt.Printf("\n\n%s%s%s", dash, board, p)
+func gameStart() error {
+	fmt.Printf("\n")
+	for ttg.Winner == false {
+		err := ttg.DrawDash()
+		if err != nil {
+			return err
+		}
+
+		err = ttg.DrawBoard()
+		if err != nil {
+			return err
+		}
+
+		err = ttg.DrawPrompt()
+		if err != nil {
+			ttg.ShowError(err.Error())
+			return nil
+		}
+
+		ttg.SwitchPlayer()
+	}
+
+	return nil
+}
+
+func gameEnd() {
+
+}
+
+func fatalError(err error) {
+	fmt.Printf("%s%s", ttg.Red("FATAL: "), err.Error())
 }
