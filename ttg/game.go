@@ -112,6 +112,100 @@ func SwitchPlayer() {
 	}
 }
 
+func CheckWin() {
+	count := 0
+	for _, v := range Plays {
+		for n := 0; n < 3; n++ {
+			if v[n] == CurrentPlayer {
+				count++
+			}
+		}
+		if count == 3 {
+			setWin()
+			return
+		}
+	}
+
+	// Check columns
+	count = 0
+	for n := 0; n < 3; n++ {
+		for _, v := range Plays {
+			if v[n] == CurrentPlayer {
+				count++
+			}
+		}
+		if count == 3 {
+			setWin()
+			return
+		}
+	}
+
+	// // rows
+	// if Plays[0][0] == CurrentPlayer &&
+	// 	Plays[0][1] == CurrentPlayer &&
+	// 	Plays[0][2] == CurrentPlayer {
+	// 	setWin()
+	// 	return
+	// }
+
+	// if Plays[1][0] == CurrentPlayer &&
+	// 	Plays[1][1] == CurrentPlayer &&
+	// 	Plays[1][2] == CurrentPlayer {
+	// 	setWin()
+	// 	return
+	// }
+
+	// if Plays[2][0] == CurrentPlayer &&
+	// 	Plays[2][1] == CurrentPlayer &&
+	// 	Plays[2][2] == CurrentPlayer {
+	// 	setWin()
+	// 	return
+	// }
+
+	// // cols
+	// if Plays[0][0] == CurrentPlayer &&
+	// 	Plays[1][0] == CurrentPlayer &&
+	// 	Plays[2][0] == CurrentPlayer {
+	// 	setWin()
+	// 	return
+	// }
+
+	// if Plays[0][1] == CurrentPlayer &&
+	// 	Plays[1][1] == CurrentPlayer &&
+	// 	Plays[2][1] == CurrentPlayer {
+	// 	setWin()
+	// 	return
+	// }
+
+	// if Plays[0][2] == CurrentPlayer &&
+	// 	Plays[1][2] == CurrentPlayer &&
+	// 	Plays[2][2] == CurrentPlayer {
+	// 	setWin()
+	// 	return
+	// }
+
+	// Check diagonals
+	// count = 0
+	if Plays[0][0] == CurrentPlayer &&
+		Plays[1][1] == CurrentPlayer &&
+		Plays[2][2] == CurrentPlayer {
+		setWin()
+		return
+	}
+
+	if Plays[0][2] == CurrentPlayer &&
+		Plays[1][1] == CurrentPlayer &&
+		Plays[2][0] == CurrentPlayer {
+		setWin()
+		return
+	}
+}
+
+func setWin() {
+	Winner = true
+	fmt.Println("WHOOOP")
+}
+
 func ShowError(msg string) {
 	s := "\nERR: " + msg + "\n"
 	fmt.Printf(ColError(s))

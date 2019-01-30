@@ -32,6 +32,8 @@ func gameStart() error {
 			return nil
 		}
 
+		ttg.CheckWin()
+
 		ttg.SwitchPlayer()
 	}
 
