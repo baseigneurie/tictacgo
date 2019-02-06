@@ -32,16 +32,29 @@ func gameStart() error {
 			return nil
 		}
 
-		ttg.CheckWin()
+		if ttg.CheckWin() {
+			gameEnd()
+			return nil
+		}
 
 		ttg.SwitchPlayer()
+	}
+
+	err := gameEnd()
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func gameEnd() {
+func gameEnd() error {
+	err := ttg.DrawBoard()
+	if err != nil {
+		return err
+	}
 
+	return nil
 }
 
 func fatalError(err error) {

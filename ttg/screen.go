@@ -19,33 +19,35 @@ func DrawBoard() error {
 		}
 
 		for j, col := range row {
+			str := ""
 			if col == "o" {
-				_, err := b.WriteString(Green(" O "))
-				if err != nil {
-					return err
+				str = Green(" O ")
+				if Winner && col == CurrentPlayer {
+					str = Red(" O ")
 				}
 			} else if col == "x" {
-				_, err := b.WriteString(Blue(" X "))
-				if err != nil {
-					return err
+				str = Blue(" X ")
+				if Winner && col == CurrentPlayer {
+					str = Red(" X ")
 				}
 			} else {
-				_, err := b.WriteString("   ")
-				if err != nil {
-					return err
-				}
+				str = "   "
+			}
+
+			_, err := b.WriteString(str)
+			if err != nil {
+				return err
 			}
 
 			if j == 2 {
-				_, err := b.WriteString("\n")
-				if err != nil {
-					return err
-				}
+				str = "\n"
 			} else {
-				_, err := b.WriteString("|")
-				if err != nil {
-					return err
-				}
+				str = "|"
+			}
+
+			_, err = b.WriteString(str)
+			if err != nil {
+				return err
 			}
 		}
 
